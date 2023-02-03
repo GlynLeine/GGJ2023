@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>GLX-Engine</RootNamespace>
     <AssemblyName>GLX-Engine</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
