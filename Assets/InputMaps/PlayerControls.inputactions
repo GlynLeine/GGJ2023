@@ -201,7 +201,7 @@
                 {
                     "name": "",
                     "id": "f4fe8706-5df6-41bf-8b99-44baa0127229",
-                    "path": "<Mouse>/delta",
+                    "path": "<Pointer>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",

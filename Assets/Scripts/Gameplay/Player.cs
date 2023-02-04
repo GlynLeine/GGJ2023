@@ -50,12 +50,12 @@ public class Player : MonoBehaviour
 
     public void Update()
     {
-        var mouseLook = GetComponent<FPSController>()?.mouseLook;
-        if (mouseLook == null)
-            return;
-        mouseLook.SetCursorLock(m_lockCursor);
-        mouseLook.lockVertical = m_lockVertical;
-        mouseLook.lockHorizontal = m_lockHorizontal;
+        //var mouseLook = GetComponent<FirstPersonController>()?.mouseLook;
+        //if (mouseLook == null)
+        //    return;
+        //mouseLook.SetCursorLock(m_lockCursor);
+        //mouseLook.lockVertical = m_lockVertical;
+        //mouseLook.lockHorizontal = m_lockHorizontal;
     }
 
     public void OnMove(InputValue value)
@@ -127,7 +127,9 @@ public class Player : MonoBehaviour
 
     public void LookInput(InputValue value)
     {
-        look = value.Get<Vector2>();
+        var vec = value.Get<Vector2>();
+        vec.y *= -1f;
+        look = vec;
     }
 
     public void SprintInput(InputValue value)
@@ -151,5 +153,15 @@ public class Player : MonoBehaviour
     public void InteractInput(InputValue value)
     {
 
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        SetCursorState(m_lockCursor);
+    }
+
+    private void SetCursorState(bool newState)
+    {
+        Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
 }
