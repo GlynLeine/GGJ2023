@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     public InputAction onLeftClick;
     public InputAction onRightClick;
     public InputAction onInteract;
+    public InputAction onQ;
+    public InputAction onE;
 
 
     [Header("Current State")]
@@ -48,7 +50,9 @@ public class Player : MonoBehaviour
 
     public void Update()
     {
-        var mouseLook = GetComponent<FPSController>().mouseLook;
+        var mouseLook = GetComponent<FPSController>()?.mouseLook;
+        if (mouseLook == null)
+            return;
         mouseLook.SetCursorLock(m_lockCursor);
         mouseLook.lockVertical = m_lockVertical;
         mouseLook.lockHorizontal = m_lockHorizontal;

@@ -4,15 +4,43 @@ using UnityEngine;
 
 public class RumbleEnemy : MonoBehaviour
 {
-    public float m_health = 100f;
+    [SerializeField]
+    private float m_health = 100f;
+
+    private int m_invincibilityFrames = 10;
+    private int m_counter = 0;
+
+    private Color m_savedColor;
+
+    private void Start()
+    {
+        m_savedColor = GetComponent<MeshRenderer>().sharedMaterial.color;
+    }
+
+    private void Update()
+    {
+        if (m_counter > 0)
+        {
+            m_counter--;
+            GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
+        }
+        else
+        {
+            GetComponent<MeshRenderer>().sharedMaterial.color = m_savedColor;
+        }
+    }
 
     public void Damage(float dmg)
     {
-        m_health -= dmg;
-
-        if(m_health < 0f)
+        if (m_counter <= 0)
         {
-            Death();
+            m_health -= dmg;
+            m_counter = m_invincibilityFrames;
+
+            if (m_health < 0f)
+            {
+                Death();
+            }
         }
     }
 

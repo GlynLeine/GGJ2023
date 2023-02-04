@@ -48,7 +48,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             float yRot = input.x * XSensitivity;
             float xRot = input.y * YSensitivity;
 
-            m_CharacterTargetRot *= Quaternion.Euler(0f, yRot, character.localRotation.z);
+            m_CharacterTargetRot *= Quaternion.Euler(0f, yRot, 0f);
             m_CameraTargetRot *= Quaternion.Euler(-xRot, 0f, 0f);
             m_CameraTargetRot.z = camera.transform.localRotation.z;
 

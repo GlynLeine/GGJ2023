@@ -1,32 +1,26 @@
+using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class QuakeCamera : MonoBehaviour
 {
     public float leanAngle = 5f;
-
-    float curAngle;
-    float targetAngle;
-    float angle;
-
-    float maxRot = -45.0f;
     float rate = 2.0f;
 
     void Update()
     {
-        LeanCamera(Player.instance.move.x);
+        var x = Player.instance.move.x;
+
+        //Quaternion.Lerp(transform.localRotation, Quaternion.AngleAxis(x * -leanAngle, transform.parent.forward), Time.deltaTime * rate);
+        //transform.forward = fwd;
+        //transform.right = right;
+        //transform.localRotation = ;
+
+        // = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(transform.localRotation.x, transform.localRotation.y, x * -leanAngle), Time.deltaTime * rate);
     }
 
-    public void LeanCamera(float axis)
-    {
-        curAngle = transform.localEulerAngles.z;
-        targetAngle = leanAngle - axis;
-
-        if (axis == 0.0f) targetAngle = 0.0f;
-
-       transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(transform.localRotation.x, transform.localRotation.y, axis * maxRot), Time.deltaTime * rate);
-
-    }
 }
