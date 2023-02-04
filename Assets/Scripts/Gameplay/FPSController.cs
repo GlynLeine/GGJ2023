@@ -89,6 +89,7 @@ public class FPSController : MonoBehaviour
     private Vector2 m_input;
     private Vector2 m_look;
     private bool m_Jump, m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
+    public bool m_quakeCam;
 
 
     public Vector3 Velocity
@@ -151,7 +152,6 @@ public class FPSController : MonoBehaviour
     {
         RotateView();
     }
-
 
     private void FixedUpdate()
     {

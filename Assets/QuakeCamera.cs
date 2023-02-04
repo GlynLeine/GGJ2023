@@ -11,24 +11,6 @@ public class QuakeCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // If _leftBtn key is hit, rotate Z axis of camera by _tiltAmount
-        if (Keyboard.current.aKey.IsPressed())
-        {
-            this.transform.Rotate(0, 0, _tiltAmount);
-        }
-        else
-        {
-            this.transform.Rotate(0, 0, -_tiltAmount);
-        }
-
-        // Same as above, but inverted values
-        if (Keyboard.current.dKey.IsPressed())
-        {
-            this.transform.Rotate(0, 0, -_tiltAmount);
-        }
-        else 
-        {
-            this.transform.Rotate(0, 0, _tiltAmount);
-        }
+        transform.Rotate(0, 0, Player.instance.move.x * _tiltAmount);
     }
 }
