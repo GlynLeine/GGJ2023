@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -10,7 +12,6 @@ public class Portal : MonoBehaviour
     static int noCollisionLayer;
     static int defaultLayer;
 
-
     [SerializeField]
     private Portal m_linkedPortal;
     [SerializeField]
@@ -19,8 +20,6 @@ public class Portal : MonoBehaviour
     private Camera m_playerCam;
     private Camera m_portalCam;
     private RenderTexture m_viewTexture;
-
-    private GameObject m_teleportingPlayer;
 
     private void Awake()
     {
@@ -33,9 +32,9 @@ public class Portal : MonoBehaviour
 
     void CreateViewTexture()
     {
-        if(m_viewTexture == null || m_viewTexture.width != Screen.width || m_viewTexture.height != Screen.height)
+        if (m_viewTexture == null || m_viewTexture.width != Screen.width || m_viewTexture.height != Screen.height)
         {
-            if(m_viewTexture != null)
+            if (m_viewTexture != null)
             {
                 m_viewTexture.Release();
             }
@@ -61,55 +60,71 @@ public class Portal : MonoBehaviour
         m_screen.enabled = true;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     public void LinkPortal(Portal portal)
     {
-        if (m_linkedPortal == null)
+        if (portal != this && m_linkedPortal == null)
         {
             m_linkedPortal = portal;
             portal.m_linkedPortal = this;
         }
     }
 
+    public void Teleport(GameObject obj)
+    {
+        Vector3 posA = transform.position;
+        quaternion rotA = transform.rotation;
+        Matrix4x4 toPortal = Matrix4x4.Inverse(Matrix4x4.TRS(posA, rotA, Vector3.one));
+
+
+        Vector3 posB = m_linkedPortal.transform.position;
+        quaternion rotB = quaternion.AxisAngle(Vector3.up, Mathf.PI) * m_linkedPortal.transform.rotation;
+        Matrix4x4 fromPortal = Matrix4x4.TRS(posB, rotB, Vector3.one);
+
+        Matrix4x4 reflectionMatrix = fromPortal * toPortal;
+
+        obj.transform.position = reflectionMatrix.MultiplyPoint(obj.transform.position);
+        obj.transform.rotation = reflectionMatrix.rotation * obj.transform.rotation;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if(m_linkedPortal == null) { return; }
+        Debug.Log("Enter " + gameObject.name  + ": " + other.gameObject.name);
+        if (m_linkedPortal == null) { return; }
 
-        if (other.gameObject.tag == "Player")
+        Teleporter teleporter = other.GetComponent<Teleporter>();
+        if (teleporter == null)
         {
-            m_teleportingPlayer = other.gameObject;
+            teleporter = other.AddComponent<Teleporter>();
+            teleporter.currentPortal = this;
+            teleporter.references = 1;
             other.gameObject.layer = noCollisionLayer;
+            return;
         }
-        else if (m_teleportingPlayer != null && other.gameObject.tag == "MainCamera")
+
+        if (teleporter.currentPortal == this || teleporter.currentPortal == m_linkedPortal)
         {
-            Matrix4x4 reflectionMatrix = m_linkedPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix;
-
-            Transform playerTransform = m_teleportingPlayer.transform;
-
-            playerTransform.position = reflectionMatrix.MultiplyPoint(playerTransform.position);
-
-            FPSController fpsController = m_teleportingPlayer.GetComponent<FPSController>();
-
-            fpsController.mouseLook.SetCharRot(playerTransform.rotation = reflectionMatrix.rotation * playerTransform.rotation);
-            Transform cameraTransform = m_teleportingPlayer.GetComponentInChildren<Camera>().transform;
-            fpsController.mouseLook.SetCamRot(cameraTransform.rotation = reflectionMatrix.rotation * cameraTransform.rotation);
+            teleporter.currentPortal = this;
+            teleporter.references++;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        Debug.Log("Exit " + gameObject.name  + ": " + other.gameObject.name);
         if (m_linkedPortal == null) { return; }
 
-        if (other.gameObject.tag == "Player")
+        Teleporter teleporter = other.GetComponent<Teleporter>();
+        if (teleporter != null)
         {
-            m_teleportingPlayer = null;
-            other.gameObject.layer = defaultLayer;
+            if (teleporter.currentPortal == this || teleporter.currentPortal == m_linkedPortal)
+            {
+                if (--teleporter.references <= 0)
+                {
+                    Destroy(teleporter);
+                    other.gameObject.layer = defaultLayer;
+                }
+            }
         }
     }
 }
