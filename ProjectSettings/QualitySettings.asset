@@ -4,7 +4,7 @@
 QualitySettings:
   m_ObjectHideFlags: 0
   serializedVersion: 5
-  m_CurrentQuality: 0
+  m_CurrentQuality: 2
   m_QualitySettings:
   - serializedVersion: 2
     name: High Fidelity
@@ -40,7 +40,7 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 11400000, guid: 59c230be0deae1444ab4cb9f2eac28a0,
+    customRenderPipeline: {fileID: 11400000, guid: 3ef57bbca8aa6694dba8f6e80646509c,
       type: 2}
     excludedTargetPlatforms: []
   - serializedVersion: 2
@@ -77,7 +77,7 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 11400000, guid: 3e2e6bfc59709614ab90c0cd7d755e48,
+    customRenderPipeline: {fileID: 11400000, guid: 3ef57bbca8aa6694dba8f6e80646509c,
       type: 2}
     excludedTargetPlatforms: []
   - serializedVersion: 2
@@ -114,7 +114,7 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 11400000, guid: 168a2336534e4e043b2a210b6f8d379a,
+    customRenderPipeline: {fileID: 11400000, guid: 3ef57bbca8aa6694dba8f6e80646509c,
       type: 2}
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
