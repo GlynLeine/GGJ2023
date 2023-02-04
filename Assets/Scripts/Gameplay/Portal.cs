@@ -7,6 +7,10 @@ public class Portal : MonoBehaviour
 {
     static readonly int MainTexture = Shader.PropertyToID("_BaseMap");
 
+    static int noCollisionLayer;
+    static int defaultLayer;
+
+
     [SerializeField]
     private Portal m_linkedPortal;
     [SerializeField]
@@ -16,8 +20,12 @@ public class Portal : MonoBehaviour
     private Camera m_portalCam;
     private RenderTexture m_viewTexture;
 
+    private GameObject m_teleportingPlayer;
+
     private void Awake()
     {
+        noCollisionLayer = LayerMask.NameToLayer("No Wall Collision");
+        defaultLayer = LayerMask.NameToLayer("Default");
         m_playerCam = Camera.main;
         m_portalCam = GetComponentInChildren<Camera>();
         m_portalCam.enabled = false;
@@ -65,7 +73,43 @@ public class Portal : MonoBehaviour
         if (m_linkedPortal == null)
         {
             m_linkedPortal = portal;
-            portal.LinkPortal(m_linkedPortal);
+            portal.m_linkedPortal = this;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(m_linkedPortal == null) { return; }
+
+        if (other.gameObject.tag == "Player")
+        {
+            m_teleportingPlayer = other.gameObject;
+            other.gameObject.layer = noCollisionLayer;
+        }
+        else if (m_teleportingPlayer != null && other.gameObject.tag == "MainCamera")
+        {
+            Matrix4x4 reflectionMatrix = m_linkedPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix;
+
+            Transform playerTransform = m_teleportingPlayer.transform;
+
+            playerTransform.position = reflectionMatrix.MultiplyPoint(playerTransform.position);
+
+            FPSController fpsController = m_teleportingPlayer.GetComponent<FPSController>();
+
+            fpsController.mouseLook.SetCharRot(playerTransform.rotation = reflectionMatrix.rotation * playerTransform.rotation);
+            Transform cameraTransform = m_teleportingPlayer.GetComponentInChildren<Camera>().transform;
+            fpsController.mouseLook.SetCamRot(cameraTransform.rotation = reflectionMatrix.rotation * cameraTransform.rotation);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (m_linkedPortal == null) { return; }
+
+        if (other.gameObject.tag == "Player")
+        {
+            m_teleportingPlayer = null;
+            other.gameObject.layer = defaultLayer;
         }
     }
 }

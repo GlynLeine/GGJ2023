@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 3430688812777593738}
   - component: {fileID: 3430688812777593737}
   - component: {fileID: 5088901480957831147}
+  - component: {fileID: 4093228580853142086}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -150,6 +151,19 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!65 &4093228580853142086
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3430688812777593736}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9139064, y: 0.51861, z: 0.09601784}
+  m_Center: {x: 0.010761708, y: 0, z: 0.3013277}
 --- !u!1 &3430688812831192364
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +182,7 @@ GameObject:
   - component: {fileID: 3430688812831192365}
   m_Layer: 0
   m_Name: Bean
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

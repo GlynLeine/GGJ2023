@@ -10,7 +10,7 @@ public class PortalManager : MonoBehaviour
 
     private void Awake()
     {
-        RenderPipelineManager.beginCameraRendering += RenderPortal;
+        //RenderPipelineManager.beginCameraRendering += RenderPortal;
     }
 
     public void RenderPortal(ScriptableRenderContext context, Camera camera)
