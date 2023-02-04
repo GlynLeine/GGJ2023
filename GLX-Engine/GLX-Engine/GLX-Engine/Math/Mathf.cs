@@ -11,6 +11,7 @@ namespace GLXEngine
         /// Constant PI
         /// </summary>
         public const float PI = (float)Math.PI;
+        public const float Epsilon = (float)0.000001f;
 
         /// <summary>
         /// Returns the absolute value of specified number

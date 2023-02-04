@@ -1,8 +1,8 @@
-﻿using GLXEngine;
-using System;
+﻿using System;
+using GLXEngine;
 using static GLXEngine.Mathf;
 
-namespace GLX_Engine.Core
+namespace GLXEngine.Math
 {
     public struct Vector3
     {

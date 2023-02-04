@@ -1,7 +1,8 @@
 using System;
+using GLXEngine;
 using static GLXEngine.Mathf;
 
-namespace GLXEngine.Core
+namespace GLXEngine.Math
 {
     public struct Vector2
     {

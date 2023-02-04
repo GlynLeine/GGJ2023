@@ -104,7 +104,6 @@
     <Compile Include="GLX-Engine\Core\CollisionOld\Rectangle.cs" />
     <Compile Include="GLX-Engine\Core\Texture2D.cs" />
     <Compile Include="GLX-Engine\Core\Transformable.cs" />
-    <Compile Include="GLX-Engine\Core\Vector2.cs" />
     <Compile Include="GLX-Engine\Audio\FMOD.cs" />
     <Compile Include="GLX-Engine\Managers\CollisionManager.cs" />
     <Compile Include="GLX-Engine\Managers\UpdateManager.cs" />
