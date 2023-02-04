@@ -138,14 +138,10 @@ public class Player : MonoBehaviour
 
     public void LeftClickInput(InputValue value)
     {
-        var val = value.Get<float>();
-        Debug.Log($"LeftClick: {val}");
     }
 
     public void RightClickInput(InputValue value)
     {
-        var val = value.Get<float>();
-        Debug.Log($"RightClick: {val}");
     }
 
     public void InteractInput(InputValue value)
