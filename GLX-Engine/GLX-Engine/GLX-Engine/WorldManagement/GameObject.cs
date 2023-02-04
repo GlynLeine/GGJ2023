@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using GLX_Engine;
@@ -6,7 +7,7 @@ using GLXEngine.Core;
 
 namespace GLXEngine
 {
-    public sealed class GameObject : Transformable
+    public class GameObject : IEnumerable<GameObject>
     {
         public string name;
 
@@ -18,20 +19,26 @@ namespace GLXEngine
         private List<Behaviour> m_behaviours = new List<Behaviour>();
         private Dictionary<Type, int> m_behaviourTypes = new Dictionary<Type, int>();
 
+        public Transform transform
+        {
+            get { return (Transform)m_behaviours[0]; }
+            set { m_behaviours[0] = value; }
+        }
+
         public bool enabled
         {
             get { return m_enabled; }
             set
             {
-                m_enabled = value;
-                if (m_enabled)
+                if (!m_enabled && value)
                 {
                     SendMessage("OnEnable");
                 }
-                else
+                else if (m_enabled && !value)
                 {
                     SendMessage("OnDisable");
                 }
+                m_enabled = value;
             }
         }
 
@@ -57,18 +64,16 @@ namespace GLXEngine
 
         public GameObject()
         {
+            AddBehaviour<Transform>();
         }
 
         public void SendMessage(string methodName, bool propegateHierarchy = true, object[] args = null)
         {
-            BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.IgnoreReturn;
-
             if (args == null) { args = new object[0]; }
 
             foreach (Behaviour behaviour in m_behaviours)
             {
-                Type type = behaviour.GetType();
-                type.InvokeMember(methodName, flags, Type.DefaultBinder, behaviour, args);
+                behaviour.ReceiveMessage(methodName, args);
             }
 
             if (propegateHierarchy)
@@ -97,13 +102,22 @@ namespace GLXEngine
 
         public T AddBehaviour<T>(T behaviour) where T : Behaviour
         {
-            if (m_behaviourTypes.ContainsKey(behaviour.GetType()))
+            Type behaviourType = behaviour.GetType();
+            if (m_behaviourTypes.ContainsKey(behaviourType))
             {
                 return GetBehaviour<T>();
             }
 
-            m_behaviourTypes.Add(behaviour.GetType(), m_behaviours.Count);
+            m_behaviourTypes.Add(behaviourType, m_behaviours.Count);
             m_behaviours.Add(behaviour);
+            behaviour.gameObject = this;
+
+            if (m_enabled)
+            {
+                behaviour.ReceiveMessage("OnEnable");
+            }
+
+            behaviour.ReceiveMessage("Start");
             return behaviour;
         }
 
@@ -118,7 +132,7 @@ namespace GLXEngine
             {
                 return null;
             }
-            
+
             return (T)m_behaviours[m_behaviourTypes[typeof(T)]];
         }
 
@@ -141,6 +155,7 @@ namespace GLXEngine
         {
             if (!m_scene.Contains(this)) return;
 
+            enabled = false;
             SendMessage("OnDestroy", false);
 
             //detach all children
@@ -159,7 +174,7 @@ namespace GLXEngine
         {
             if (!m_enabled) { return; }
 
-            glContext.PushMatrix(matrix);
+            glContext.PushMatrix(transform.m_matrix);
 
             foreach (Behaviour behaviour in m_behaviours)
             {
@@ -203,6 +218,15 @@ namespace GLXEngine
             return "[" + this.GetType().Name + "::" + name + "]";
         }
 
+        public IEnumerator<GameObject> GetEnumerator()
+        {
+            return ((IEnumerable<GameObject>)m_children).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)m_children).GetEnumerator();
+        }
     }
 }
 

@@ -1,9 +1,10 @@
-﻿using GLXEngine.Core;
+﻿using GLX_Engine;
+using GLXEngine.Core;
 using GLXEngine.ECS;
 
 namespace GLXEngine
 {
-    public class TransformComponent : ECSComponent
+    public class Transform : Behaviour
     {
         //  îx    îy    îz    îw
         //  ĵx    ĵy    ĵz    ĵw
