@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GLX-Engine\Behaviours\Behaviour.cs" />
     <Compile Include="GLX-Engine\Core\CollisionOld\AARectangle.cs" />
     <Compile Include="GLX-Engine\Core\CollisionOld\CollisionDetector.cs" />
     <Compile Include="GLX-Engine\Core\CollisionOld\CollisionShape.cs" />
