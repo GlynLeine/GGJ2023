@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5115985397449853046}
   - component: {fileID: 8165160300360402899}
   - component: {fileID: 6247773896318808857}
+  - component: {fileID: 346824099819411984}
   m_Layer: 0
   m_Name: gtwy-cwp-2x4
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &346824099819411984
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5599224694573486796}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 0, z: 4}
+  m_Center: {x: 0, y: 0, z: 0}
