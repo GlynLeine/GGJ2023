@@ -9,59 +9,72 @@ using static UnityEditor.PlayerSettings;
 public class Portal : MonoBehaviour
 {
     static readonly int MainTexture = Shader.PropertyToID("_BaseMap");
+    static readonly int LinkedBool = Shader.PropertyToID("_Linked");
 
     static int noCollisionLayer;
     static int defaultLayer;
+    static int canPortalLayer;
+
+    public LayerMask wallLayerMask;
 
     [SerializeField]
     private Portal m_linkedPortal;
 
+    [HideInInspector]
     public Portal linkedPortal { get { return m_linkedPortal; } }
 
     [SerializeField]
     private MeshRenderer m_screen;
 
-    private Camera m_playerCam;
-    private Camera m_portalCam;
     private RenderTexture m_viewTexture;
+
+    public List<GameObject> m_walls = new List<GameObject>();
 
     private void Awake()
     {
         noCollisionLayer = LayerMask.NameToLayer("No Wall Collision");
         defaultLayer = LayerMask.NameToLayer("Default");
-        m_playerCam = Camera.main;
-        m_portalCam = GetComponentInChildren<Camera>();
-        m_portalCam.enabled = false;
+        canPortalLayer = LayerMask.NameToLayer("Can Be Portaled");
+
+        CreateViewTexture();
+
+        if (m_linkedPortal != null)
+        {
+            m_screen.material.SetInt(LinkedBool, 1);
+        }
+
+        CheckWall();
+    }
+
+    public void CheckWall()
+    {
+        foreach (GameObject wall in m_walls)
+        {
+            wall.layer = canPortalLayer;
+        }
+
+        m_walls.Clear();
+
+        Vector3 sphereOffset = new Vector3(0f, 1f, 0f);
+        Vector3 pos = transform.position;
+
+        RaycastHit[] hits = Physics.CapsuleCastAll(pos + sphereOffset, pos - sphereOffset, 0.5f, transform.forward, 1f, wallLayerMask);
+
+        foreach (RaycastHit hit in hits)
+        {
+            m_walls.Add(hit.transform.gameObject);
+        }
+
     }
 
     void CreateViewTexture()
     {
-        if (m_viewTexture == null || m_viewTexture.width != Screen.width || m_viewTexture.height != Screen.height)
+        if (m_viewTexture == null)
         {
-            if (m_viewTexture != null)
-            {
-                m_viewTexture.Release();
-            }
-
-            m_viewTexture = new RenderTexture(Screen.width, Screen.height, 0);
-            m_portalCam.targetTexture = m_viewTexture;
-            m_linkedPortal.m_screen.material.SetTexture(MainTexture, m_viewTexture);
+            m_viewTexture = new RenderTexture(Screen.width, Screen.height, 24);
+            GetComponentInChildren<Camera>().targetTexture = m_viewTexture;
+            m_screen.material.SetTexture(MainTexture, m_viewTexture);
         }
-    }
-
-    public void Render(ScriptableRenderContext context)
-    {
-        if (m_linkedPortal == null)
-            return;
-
-        m_screen.enabled = false;
-        CreateViewTexture();
-        var m = transform.localToWorldMatrix * m_linkedPortal.transform.worldToLocalMatrix * m_playerCam.transform.localToWorldMatrix;
-        m_portalCam.transform.SetPositionAndRotation(m.GetColumn(3), m.rotation);
-
-        m_portalCam.Render();
-
-        m_screen.enabled = true;
     }
 
     // Update is called once per frame
@@ -71,6 +84,9 @@ public class Portal : MonoBehaviour
         {
             m_linkedPortal = portal;
             portal.m_linkedPortal = this;
+
+            m_linkedPortal.m_screen.material.SetInt(LinkedBool, 1);
+            m_screen.material.SetInt(LinkedBool, 1);
         }
     }
 
@@ -80,7 +96,7 @@ public class Portal : MonoBehaviour
 
         if (Vector3.Dot(-transform.forward, teleporter.dir) >= -float.Epsilon) { return; }
 
-        Debug.Log($"Target: {obj.name} From: {gameObject.name} to: {m_linkedPortal.gameObject.name}");
+        //Debug.Log($"Target: {obj.name} From: {gameObject.name} to: {m_linkedPortal.gameObject.name}");
 
         Vector3 posA = transform.position;
         quaternion rotA = transform.rotation;
@@ -95,12 +111,10 @@ public class Portal : MonoBehaviour
         Vector3 objPos = reflectionMatrix.MultiplyPoint(obj.transform.position);
         Quaternion objRot = reflectionMatrix.rotation * obj.transform.rotation;
 
-        Vector3 normal = -m_linkedPortal.transform.forward;
-        float dist = Vector3.Dot(objPos - m_linkedPortal.transform.position, normal);
-
-        objPos += normal * (Mathf.Sign(dist) * (math.abs(dist) + float.Epsilon));
-
         Rigidbody rb = obj.GetComponent<Rigidbody>();
+
+        rb.velocity = reflectionMatrix.MultiplyVector(rb.velocity);
+
         obj.transform.position = objPos;
         obj.transform.rotation = objRot;
         rb.position = objPos;
@@ -132,6 +146,11 @@ public class Portal : MonoBehaviour
             teleporter.currentPortal = this;
             teleporter.references = 1;
             other.gameObject.layer = noCollisionLayer;
+
+            foreach (GameObject wall in m_walls)
+            {
+                wall.layer = noCollisionLayer;
+            }
             return;
         }
 
@@ -154,6 +173,11 @@ public class Portal : MonoBehaviour
             {
                 teleporter.currentPortal = null;
                 other.gameObject.layer = defaultLayer;
+
+                foreach (GameObject wall in m_walls)
+                {
+                    wall.layer = canPortalLayer;
+                }
             }
         }
     }

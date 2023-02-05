@@ -62,16 +62,17 @@ public class PortalGun : MonoBehaviour
             {
                 if (m_leftPortal != null)
                 {
-                    PortalManager.portals.Remove(m_leftPortal);
-                    Destroy(m_leftPortal.gameObject);
+                    MovePortal(hitInfo, m_leftPortal.gameObject);
                 }
-
-                m_leftPortal = ShootPortal(hitInfo, m_leftPortalPrefab).GetComponent<Portal>();
-                PortalManager.portals.Add(m_leftPortal);
-
-                if (m_rightPortal != null)
+                else
                 {
-                    m_leftPortal.LinkPortal(m_rightPortal);
+                    m_leftPortal = ShootPortal(hitInfo, m_leftPortalPrefab).GetComponent<Portal>();
+                    PortalManager.portals.Add(m_leftPortal);
+
+                    if (m_rightPortal != null)
+                    {
+                        m_leftPortal.LinkPortal(m_rightPortal);
+                    }
                 }
             }
         }
@@ -86,19 +87,27 @@ public class PortalGun : MonoBehaviour
             {
                 if (m_rightPortal != null)
                 {
-                    PortalManager.portals.Remove(m_rightPortal);
-                    Destroy(m_rightPortal.gameObject);
+                    MovePortal(hitInfo, m_rightPortal.gameObject);
                 }
-
-                m_rightPortal = ShootPortal(hitInfo, m_rightPortalPrefab).GetComponent<Portal>();
-                PortalManager.portals.Add(m_rightPortal);
-
-                if (m_leftPortal != null)
+                else
                 {
-                    m_rightPortal.LinkPortal(m_leftPortal);
+                    m_rightPortal = ShootPortal(hitInfo, m_rightPortalPrefab).GetComponent<Portal>();
+                    PortalManager.portals.Add(m_rightPortal);
+
+                    if (m_leftPortal != null)
+                    {
+                        m_rightPortal.LinkPortal(m_leftPortal);
+                    }
                 }
             }
         }
+    }
+
+    void MovePortal(RaycastHit hitInfo, GameObject existingPortal)
+    {
+        existingPortal.transform.position = hitInfo.point + (hitInfo.normal * .1f);
+        existingPortal.transform.forward = -hitInfo.normal;
+        existingPortal.GetComponent<Portal>().CheckWall();
     }
 
     GameObject ShootPortal(RaycastHit hitInfo, GameObject portalPrefab)
@@ -106,6 +115,7 @@ public class PortalGun : MonoBehaviour
         GameObject portal = Instantiate(portalPrefab);
         portal.transform.position = hitInfo.point + (hitInfo.normal * .1f);
         portal.transform.forward = -hitInfo.normal;
+        portal.GetComponent<Portal>().CheckWall();
         return portal;
     }
 }

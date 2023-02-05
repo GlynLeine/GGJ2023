@@ -25,8 +25,6 @@ public class Teleporter : MonoBehaviour
 
     private void LateUpdate()
     {
-        Debug.Log(references);
-
         m_dir = transform.position - m_prevPos;
         m_prevPos = transform.position;
 
@@ -40,7 +38,7 @@ public class Teleporter : MonoBehaviour
 
         float dist = Vector3.Dot(pos - portalTransform.position, portalNormal);
 
-        if (dist > 0f) { return; }
+        if (dist > 0.21 ) { return; }
 
         currentPortal.Teleport(gameObject);
     }
