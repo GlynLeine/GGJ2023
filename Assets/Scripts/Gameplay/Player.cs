@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -50,12 +51,9 @@ public class Player : MonoBehaviour
 
     public void Update()
     {
-        //var mouseLook = GetComponent<FirstPersonController>()?.mouseLook;
-        //if (mouseLook == null)
-        //    return;
-        //mouseLook.SetCursorLock(m_lockCursor);
-        //mouseLook.lockVertical = m_lockVertical;
-        //mouseLook.lockHorizontal = m_lockHorizontal;
+        Vector3 fwd = transform.forward;
+        quaternion targetRotation = Quaternion.LookRotation(fwd, Vector3.up);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 2f);
     }
 
     public void OnMove(InputValue value)

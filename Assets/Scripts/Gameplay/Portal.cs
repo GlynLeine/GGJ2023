@@ -151,6 +151,10 @@ public class Portal : MonoBehaviour
             {
                 wall.layer = noCollisionLayer;
             }
+            foreach (GameObject wall in linkedPortal.m_walls)
+            {
+                wall.layer = noCollisionLayer;
+            }
             return;
         }
 
@@ -175,6 +179,10 @@ public class Portal : MonoBehaviour
                 other.gameObject.layer = defaultLayer;
 
                 foreach (GameObject wall in m_walls)
+                {
+                    wall.layer = canPortalLayer;
+                }
+                foreach (GameObject wall in linkedPortal.m_walls)
                 {
                     wall.layer = canPortalLayer;
                 }

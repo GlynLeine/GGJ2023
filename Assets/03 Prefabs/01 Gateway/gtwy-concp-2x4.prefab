@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3448331776020628918}
   - component: {fileID: 593938808642613628}
   - component: {fileID: 6510727166441527413}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: gtwy-concp-2x4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
