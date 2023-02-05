@@ -33,6 +33,7 @@ public class ShipController : MonoBehaviour
     {
         m_rb = GetComponent<Rigidbody2D>();
         m_renderer = GetComponent<SpriteRenderer>();
+        GetComponent<Player>().isShip = true;
     }
 
     void Update()
@@ -82,7 +83,7 @@ public class ShipController : MonoBehaviour
             else
             {
                 //transition out
-                SceneManager.LoadScene("HubWorld");
+                SceneManager.LoadScene(5);
             }
         }
     }

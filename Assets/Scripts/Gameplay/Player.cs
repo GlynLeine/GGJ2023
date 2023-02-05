@@ -46,11 +46,14 @@ public class Player : MonoBehaviour
     public Transform m_root;
     public Transform m_hand;
 
+    public bool isShip = false;
 
     public static Player instance => FindObjectOfType<Player>();
 
     public void LateUpdate()
     {
+        if(isShip) return;
+
         Vector3 fwd = transform.forward;
         quaternion targetRotation = Quaternion.LookRotation(fwd, Vector3.up);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 2f);

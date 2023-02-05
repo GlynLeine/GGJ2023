@@ -30,7 +30,9 @@ public class AsteroidSpawner : MonoBehaviour
         {
             var go = Instantiate(m_asteroid);
             var rand = Random.onUnitSphere;
-            go.transform.position = rand + (rand * Camera.main.orthographicSize);
+            rand = Camera.main.transform.position + rand + (rand * Camera.main.orthographicSize);
+            rand.z = 0;
+            go.transform.position = rand;
             go.GetComponent<Rigidbody2D>().AddForce((go.transform.position - transform.position).normalized * 5f, ForceMode2D.Impulse);
             go.GetComponent<Rigidbody2D>().AddTorque(Random.Range(-20f, 20f));
             m_spawned.Add(go);
