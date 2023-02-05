@@ -20,10 +20,10 @@ public class ElevatorBeanLift : MonoBehaviour
 
     void getFocusedButton()
     {
-        if(Keyboard.current.eKey.isPressed)
+        if(Mouse.current.leftButton.isPressed)
         {
             Ray ray = new Ray(transform.position, transform.forward);
-            Physics.Raycast(ray, out liftData, 2);
+            if(!Physics.Raycast(ray, out liftData, 2)) { return; }
             Debug.DrawRay(transform.position, transform.forward, Color.green);
             GameObject focusButton = liftData.collider.gameObject;
             if (focusButton.tag == "LiftButton")
