@@ -8,14 +8,13 @@ public class buttonBehaviour : MonoBehaviour
     public UnityEvent invokeMethodActivate;
     public UnityEvent invokeMethodDeactivate;
     string buttonTriggerTag = "ButtonActivator";
-    public bool inTrigger = false;
+
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == buttonTriggerTag && !inTrigger)
+        if (other.tag == buttonTriggerTag)
         {
             invokeMethodActivate.Invoke();
-            inTrigger = true;
         }
     }
 
@@ -24,7 +23,6 @@ public class buttonBehaviour : MonoBehaviour
         if (other.tag == buttonTriggerTag)
         {
             invokeMethodDeactivate.Invoke();
-            inTrigger = false;
         }
     }
 
@@ -32,7 +30,7 @@ public class buttonBehaviour : MonoBehaviour
     {
         if (other.tag == buttonTriggerTag)
         {
-          //  inTrigger = true;
+           // inTrigger = true;
         }          
     }
 
