@@ -6,15 +6,17 @@ using UnityEngine.Events;
 public class buttonBehaviour : MonoBehaviour
 {
     public UnityEvent invokeMethodActivate;
-    public UnityEvent invokeMethodDeactivate;
+   // public UnityEvent invokeMethodDeactivate;
     string buttonTriggerTag = "ButtonActivator";
+    public bool inTrigger = false;
 
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == buttonTriggerTag)
         {
-            invokeMethodActivate.Invoke();
+            inTrigger = true;
+            invokeMethodActivate.Invoke();            
         }
     }
 
@@ -22,17 +24,12 @@ public class buttonBehaviour : MonoBehaviour
     {
         if (other.tag == buttonTriggerTag)
         {
-            invokeMethodDeactivate.Invoke();
+            inTrigger = false;
+            invokeMethodActivate.Invoke();
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.tag == buttonTriggerTag)
-        {
-           // inTrigger = true;
-        }          
-    }
+
 
 
 
