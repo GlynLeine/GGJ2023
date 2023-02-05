@@ -96,8 +96,6 @@ public class Portal : MonoBehaviour
 
         if (Vector3.Dot(-transform.forward, teleporter.dir) >= -float.Epsilon) { return; }
 
-        //Debug.Log($"Target: {obj.name} From: {gameObject.name} to: {m_linkedPortal.gameObject.name}");
-
         Vector3 posA = transform.position;
         quaternion rotA = transform.rotation;
         Matrix4x4 toPortal = Matrix4x4.Inverse(Matrix4x4.TRS(posA, rotA, Vector3.one));
@@ -113,7 +111,7 @@ public class Portal : MonoBehaviour
 
         Rigidbody rb = obj.GetComponent<Rigidbody>();
 
-        rb.velocity = reflectionMatrix.MultiplyVector(rb.velocity);
+        rb.velocity = reflectionMatrix.MultiplyVector(rb.velocity) + Vector3.Normalize(teleporter.dir) * 0.1f;
 
         obj.transform.position = objPos;
         obj.transform.rotation = objRot;

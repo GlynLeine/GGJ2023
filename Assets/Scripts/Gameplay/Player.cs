@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
 
     public static Player instance => FindObjectOfType<Player>();
 
-    public void Update()
+    public void LateUpdate()
     {
         Vector3 fwd = transform.forward;
         quaternion targetRotation = Quaternion.LookRotation(fwd, Vector3.up);

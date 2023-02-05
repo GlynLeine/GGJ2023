@@ -58,8 +58,12 @@ public class PortalGun : MonoBehaviour
         if (value.isPressed)
         {
             RaycastHit hitInfo;
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, Mathf.Infinity, m_canHit))
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, Mathf.Infinity, m_canHit.value | LayerMask.GetMask("Default")))
             {
+                int mask = 1 << hitInfo.transform.gameObject.layer;
+
+                if((mask & m_canHit.value) == 0) { return; }
+
                 if (m_leftPortal != null)
                 {
                     MovePortal(hitInfo, m_leftPortal.gameObject);
@@ -83,8 +87,11 @@ public class PortalGun : MonoBehaviour
         if (value.isPressed)
         {
             RaycastHit hitInfo;
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, Mathf.Infinity, m_canHit))
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, Mathf.Infinity, m_canHit.value | LayerMask.GetMask("Default")))
             {
+                int mask = 1 << hitInfo.transform.gameObject.layer;
+                if ((mask & m_canHit.value) == 0) { return; }
+
                 if (m_rightPortal != null)
                 {
                     MovePortal(hitInfo, m_rightPortal.gameObject);
