@@ -11,9 +11,10 @@ public class liftButtonBHVR : MonoBehaviour
 
     GameObject elevatorDoors;
     bool doorOpen;
-
+    public bool loadsScene = true;
     bool rumble = false;
     bool openAgain = false;
+    
 
      void Start()
     {
@@ -22,7 +23,7 @@ public class liftButtonBHVR : MonoBehaviour
 
      void Update()
      {
-        waitForDoorClosed();
+       // waitForDoorClosed();
      }
 
     public void handlePress()
@@ -30,6 +31,7 @@ public class liftButtonBHVR : MonoBehaviour
         if(doorOpen)
         {
             closeDoors();
+            changeScene();
         }
         else
         {
@@ -39,7 +41,7 @@ public class liftButtonBHVR : MonoBehaviour
 
     void changeScene()
     {
-        if(sceneToLoadIndex != -1 )
+        if(loadsScene)
         {
             SceneManager.LoadScene(sceneToLoadIndex);
         }
@@ -70,7 +72,7 @@ public class liftButtonBHVR : MonoBehaviour
         if (elevatorDoors.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Idle-Closed-After"))
         {
             print("doors closed after");
-            changeScene();
+            
         }
     }
 
