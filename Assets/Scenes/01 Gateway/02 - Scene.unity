@@ -683,14 +683,35 @@ PrefabInstance:
         type: 3}
       propertyPath: invokeMethodActivate.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1644014337}
+      objectReference: {fileID: 1069712561}
     - target: {fileID: 5544884034789085727, guid: c0dc7edea17078f4b9a9a87f0416f2eb,
         type: 3}
       propertyPath: invokeMethodDeactivate.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1644014337}
+    - target: {fileID: 5544884034789085727, guid: c0dc7edea17078f4b9a9a87f0416f2eb,
+        type: 3}
+      propertyPath: invokeMethodActivate.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: openDoorWithButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544884034789085727, guid: c0dc7edea17078f4b9a9a87f0416f2eb,
+        type: 3}
+      propertyPath: invokeMethodActivate.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: portalDoorBehaviour, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544884034789085727, guid: c0dc7edea17078f4b9a9a87f0416f2eb,
+        type: 3}
+      propertyPath: invokeMethodActivate.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0dc7edea17078f4b9a9a87f0416f2eb, type: 3}
+--- !u!1 &57896604 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7525710198330295199, guid: c0dc7edea17078f4b9a9a87f0416f2eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 57896603}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &58278169
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11295,6 +11316,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DOOR-FRAME
       objectReference: {fileID: 0}
+    - target: {fileID: 2222468765026392114, guid: 89c575c5d230ac7449e1c5ba353002da,
+        type: 3}
+      propertyPath: linkedButton
+      value: 
+      objectReference: {fileID: 57896604}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89c575c5d230ac7449e1c5ba353002da, type: 3}
 --- !u!4 &1069712560 stripped
@@ -11303,6 +11329,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1069712559}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1069712561 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2222468765026392114, guid: 89c575c5d230ac7449e1c5ba353002da,
+    type: 3}
+  m_PrefabInstance: {fileID: 1069712559}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644014337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba5e773a55c27394a90aab06862f68b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1070966294
 PrefabInstance:
   m_ObjectHideFlags: 0

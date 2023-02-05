@@ -1317,6 +1317,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DOOR-FRAME
       objectReference: {fileID: 0}
+    - target: {fileID: 2222468765026392114, guid: 89c575c5d230ac7449e1c5ba353002da,
+        type: 3}
+      propertyPath: linkedButton
+      value: 
+      objectReference: {fileID: 2006829735}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89c575c5d230ac7449e1c5ba353002da, type: 3}
 --- !u!1001 &125939339
@@ -11141,25 +11146,19 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1103672461}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1117807138 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1785825870889878420, guid: 89c575c5d230ac7449e1c5ba353002da,
-    type: 3}
-  m_PrefabInstance: {fileID: 123166774}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1117807141 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1406063743378938158, guid: 89c575c5d230ac7449e1c5ba353002da,
     type: 3}
   m_PrefabInstance: {fileID: 123166774}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1117807143
+--- !u!114 &1117807142 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2222468765026392114, guid: 89c575c5d230ac7449e1c5ba353002da,
+    type: 3}
+  m_PrefabInstance: {fileID: 123166774}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1117807138}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba5e773a55c27394a90aab06862f68b6, type: 3}
@@ -18764,6 +18763,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2003224000}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2006829735 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7525710198330295199, guid: c0dc7edea17078f4b9a9a87f0416f2eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 364882396330037535}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2009106862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20407,16 +20412,16 @@ PrefabInstance:
         type: 3}
       propertyPath: invokeMethodActivate.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1117807143}
+      objectReference: {fileID: 1117807142}
     - target: {fileID: 5544884034789085727, guid: c0dc7edea17078f4b9a9a87f0416f2eb,
         type: 3}
       propertyPath: invokeMethodDeactivate.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1117807143}
+      objectReference: {fileID: 0}
     - target: {fileID: 5544884034789085727, guid: c0dc7edea17078f4b9a9a87f0416f2eb,
         type: 3}
       propertyPath: invokeMethodActivate.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: openDoor
+      value: openDoorWithButton
       objectReference: {fileID: 0}
     - target: {fileID: 5544884034789085727, guid: c0dc7edea17078f4b9a9a87f0416f2eb,
         type: 3}

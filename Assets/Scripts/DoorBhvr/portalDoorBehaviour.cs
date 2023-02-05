@@ -7,6 +7,9 @@ public class portalDoorBehaviour : MonoBehaviour
 {
     Animator dAnim;
     AudioSource dAudio;
+
+    [SerializeField]
+    bool linked = false;
     public GameObject linkedButton;
 
 
@@ -17,37 +20,27 @@ public class portalDoorBehaviour : MonoBehaviour
         
     }
 
-    public void handleDoor()
-    {
-        if(dAnim.GetBool("tAnimIsOpen") == false)
-        {
-            openDoor();
-            dAnim.SetBool("tAnimIsOpen", true);
-        }
-        else
-        {
-            closeDoor();
-            dAnim.SetBool("tAnimIsOpen", false);
-        }
-    }
-
-    void openDoor()              
+    public void openDoor()              
     {           
-            dAnim.SetTrigger("tAnimDoorOpen");
-            if (dAudio.clip != null)
-            {
-                dAudio.Play();
-            }
-    }
-
-    void closeDoor()
-    {
-        dAnim.SetBool("tAnimIsOpen", false);
         dAnim.SetTrigger("tAnimDoorOpen");
         if (dAudio.clip != null)
         {
             dAudio.Play();
         }
+    }
+
+    public void openDoorWithButton()
+    {
+           if (linkedButton.GetComponent<buttonBehaviour>().inTrigger == true)
+            {
+            dAnim.SetBool("tAnimIsOpen", false);
+            openDoor();
+            }
+            else
+            {
+            dAnim.SetBool("tAnimIsOpen", true);
+            openDoor();
+            }
     }
 
     
