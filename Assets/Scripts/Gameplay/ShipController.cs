@@ -12,19 +12,38 @@ public class ShipController : MonoBehaviour
     [SerializeField]
     private float m_rotThrust = 2f;
 
+    [SerializeField]
+    private Sprite m_thrustSprite;
+    [SerializeField]
+    private Sprite m_idleSprite;
+
     private Rigidbody2D m_rb;
+    private SpriteRenderer m_renderer;
 
     void Start()
     {
         m_rb = GetComponent<Rigidbody2D>();
+        m_renderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
-        var fwd = Player.instance.move.y;
+        var fwd = Mathf.Clamp01(Player.instance.move.y);
         var lat = Player.instance.move.x;
-        m_rb.AddForce(transform.up * fwd * m_fwdThrust * Time.deltaTime, ForceMode2D.Impulse);
-        m_rb.AddForce(transform.right * lat * m_rotThrust * Time.deltaTime, ForceMode2D.Impulse);
+
+        if (fwd > 0)
+            m_renderer.sprite = m_thrustSprite;
+        else
+            m_renderer.sprite = m_idleSprite;
+
+        m_rb.AddForce(transform.right * fwd * m_fwdThrust * Time.deltaTime, ForceMode2D.Impulse);
+        m_rb.AddTorque(-lat * m_rotThrust * Time.deltaTime, ForceMode2D.Impulse);
+
+        var dist = transform.position.magnitude;
+        if (dist > Camera.main.orthographicSize * 2.0f)
+        {
+            transform.position = -(transform.position.normalized * (transform.position.magnitude - 2f));
+        }
     }
 
     void OnJump(InputValue value)
@@ -32,8 +51,8 @@ public class ShipController : MonoBehaviour
         if (value.isPressed)
         {
             var bullet = Instantiate(m_bullet);
-            bullet.transform.position = transform.position + transform.up;
-            bullet.transform.up = transform.up;
+            bullet.transform.position = transform.position + transform.right;
+            bullet.transform.up = transform.right;
             bullet.GetComponent<Rigidbody2D>().AddForce(bullet.transform.up * 10f, ForceMode2D.Impulse);
         }
     }
