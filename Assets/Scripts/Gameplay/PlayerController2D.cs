@@ -20,6 +20,8 @@ public class PlayerController2D : MonoBehaviour
     private Vector2 m_groundCheckDimensions;
     [SerializeField]
     private LayerMask m_platformLayer;
+    [SerializeField]
+    private LayerMask m_enemyLayer;
     private bool m_facingRight = true;
 
     private Rigidbody2D m_rb => GetComponent<Rigidbody2D>();
@@ -75,6 +77,14 @@ public class PlayerController2D : MonoBehaviour
     {
         m_isGrounded = Physics2D.BoxCast(transform.position, m_groundCheckDimensions, 0f,
                      -transform.up, 0.1f, m_platformLayer);
+
+        RaycastHit2D hitInfo = Physics2D.BoxCast(transform.position, m_groundCheckDimensions, 0f, -transform.up, 0.1f, m_enemyLayer);
+        if (hitInfo.collider)
+        {
+            var goomba = hitInfo.collider.gameObject.GetComponent<Goomba>();
+            m_rb.velocity += Vector2.up * m_jumpForce;
+            goomba.Kill();
+        }
     }
 
     void Flip()
