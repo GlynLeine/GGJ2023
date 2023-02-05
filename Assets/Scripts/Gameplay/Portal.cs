@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static UnityEditor.PlayerSettings;
 
 public class Portal : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class Portal : MonoBehaviour
 
     [SerializeField]
     private Portal m_linkedPortal;
+
+    public Portal linkedPortal { get { return m_linkedPortal; } }
+
     [SerializeField]
     private MeshRenderer m_screen;
 
@@ -72,30 +76,59 @@ public class Portal : MonoBehaviour
 
     public void Teleport(GameObject obj)
     {
+        Teleporter teleporter = obj.GetComponent<Teleporter>();
+
+        if (Vector3.Dot(-transform.forward, teleporter.dir) >= -float.Epsilon) { return; }
+
+        Debug.Log($"Target: {obj.name} From: {gameObject.name} to: {m_linkedPortal.gameObject.name}");
+
         Vector3 posA = transform.position;
         quaternion rotA = transform.rotation;
         Matrix4x4 toPortal = Matrix4x4.Inverse(Matrix4x4.TRS(posA, rotA, Vector3.one));
 
-
         Vector3 posB = m_linkedPortal.transform.position;
-        quaternion rotB = quaternion.AxisAngle(Vector3.up, Mathf.PI) * m_linkedPortal.transform.rotation;
+        quaternion rotB = quaternion.AxisAngle(m_linkedPortal.transform.up, Mathf.PI) * m_linkedPortal.transform.rotation;
         Matrix4x4 fromPortal = Matrix4x4.TRS(posB, rotB, Vector3.one);
 
         Matrix4x4 reflectionMatrix = fromPortal * toPortal;
 
-        obj.transform.position = reflectionMatrix.MultiplyPoint(obj.transform.position);
-        obj.transform.rotation = reflectionMatrix.rotation * obj.transform.rotation;
+        Vector3 objPos = reflectionMatrix.MultiplyPoint(obj.transform.position);
+        Quaternion objRot = reflectionMatrix.rotation * obj.transform.rotation;
+
+        Vector3 normal = -m_linkedPortal.transform.forward;
+        float dist = Vector3.Dot(objPos - m_linkedPortal.transform.position, normal);
+
+        objPos += normal * (Mathf.Sign(dist) * (math.abs(dist) + float.Epsilon));
+
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        obj.transform.position = objPos;
+        obj.transform.rotation = objRot;
+        rb.position = objPos;
+        rb.rotation = objRot;
+        teleporter.currentPortal = m_linkedPortal;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position - transform.forward);
+
+        if (linkedPortal != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position, linkedPortal.transform.position);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Enter " + gameObject.name  + ": " + other.gameObject.name);
         if (m_linkedPortal == null) { return; }
 
         Teleporter teleporter = other.GetComponent<Teleporter>();
-        if (teleporter == null)
+        if (teleporter == null) { return; }
+
+        if (teleporter.currentPortal == null)
         {
-            teleporter = other.AddComponent<Teleporter>();
             teleporter.currentPortal = this;
             teleporter.references = 1;
             other.gameObject.layer = noCollisionLayer;
@@ -104,26 +137,23 @@ public class Portal : MonoBehaviour
 
         if (teleporter.currentPortal == this || teleporter.currentPortal == m_linkedPortal)
         {
-            teleporter.currentPortal = this;
             teleporter.references++;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("Exit " + gameObject.name  + ": " + other.gameObject.name);
         if (m_linkedPortal == null) { return; }
 
         Teleporter teleporter = other.GetComponent<Teleporter>();
-        if (teleporter != null)
+        if (teleporter == null) { return; }
+
+        if (teleporter.currentPortal == this || teleporter.currentPortal == m_linkedPortal)
         {
-            if (teleporter.currentPortal == this || teleporter.currentPortal == m_linkedPortal)
+            if (--teleporter.references <= 0)
             {
-                if (--teleporter.references <= 0)
-                {
-                    Destroy(teleporter);
-                    other.gameObject.layer = defaultLayer;
-                }
+                teleporter.currentPortal = null;
+                other.gameObject.layer = defaultLayer;
             }
         }
     }

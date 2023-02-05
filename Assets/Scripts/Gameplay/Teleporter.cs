@@ -9,38 +9,39 @@ public class Teleporter : MonoBehaviour
     public int references = 0;
 
     private Vector3 m_prevPos;
+    private Vector3 m_dir;
 
-    public Vector3 direction
+    public Vector3 dir { get { return m_dir; } }
+
+    private void OnDrawGizmos()
     {
-        get
-        {
-            Vector3 diff = transform.position - m_prevPos;
-            float sqrDist = diff.sqrMagnitude;
-            if (sqrDist < float.Epsilon)
-                return diff;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.Normalize(m_dir));
 
-            return diff / Mathf.Sqrt(sqrDist);
-        }
-    }
-
-    private void Update()
-    {
-        Transform portalTransform = currentPortal.transform;
-        Vector3 pos = transform.position;
-
-        Vector3 portalNormal = -portalTransform.forward;
-
-        float dist = Vector3.Dot(pos - portalTransform.position, portalNormal);
-        float dir = -Vector3.Dot(transform.position - m_prevPos, portalNormal);
-
-        Debug.Log("[" + dist + "], [" + dir + "], " + currentPortal.gameObject.name);
-        if (dist > 0f || dir <= float.Epsilon) { return; }
-
-        currentPortal.Teleport(gameObject);
+        if (currentPortal == null) { return; }
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, currentPortal.transform.position);
     }
 
     private void LateUpdate()
     {
+        Debug.Log(references);
+
+        m_dir = transform.position - m_prevPos;
         m_prevPos = transform.position;
+
+        if (currentPortal == null) { return; }
+
+        Vector3 pos = transform.position;
+
+        Transform portalTransform = currentPortal.transform;
+
+        Vector3 portalNormal = -portalTransform.forward;
+
+        float dist = Vector3.Dot(pos - portalTransform.position, portalNormal);
+
+        if (dist > 0f) { return; }
+
+        currentPortal.Teleport(gameObject);
     }
 }
